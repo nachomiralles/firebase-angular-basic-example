@@ -10,15 +10,13 @@ import {Hero} from '../hero';
 export class DatabaseService {
 
   db;
+  nextID: number = 1;
 
   public heroes: Subject<Hero[]> = new Subject<Hero[]>();
-  // heroes: Hero[];
 
   constructor() {
     this._init();
     this.conectWithHeroes();
-
-
   }
 
   conectWithHeroes(){
@@ -29,11 +27,11 @@ export class DatabaseService {
           querySnapshot.forEach(
             (doc) => {
               const h = new Hero(doc.data());
-              h.setId(doc.id);
+              h.setFirebaseId(doc.id);
               heroes.push(h);
-
             });
-          console.log(heroes);
+          this._sortHeroes(heroes);
+          if(heroes.length>0) this.nextID = heroes[heroes.length-1].newId + 1;
           this.heroes.next(heroes);
         });
   }
@@ -45,11 +43,25 @@ export class DatabaseService {
   }
 
   addHero(h: Hero){
+
     this.db.collection('heroes')
       .add({
-          // id: h.id,
+          newId: this.nextID,
           name: h.name
         });
+  }
+
+  _sortHeroes(heroes: Hero[]){
+    heroes.sort(
+      (h1, h2) =>{
+        if(h1.newId>h2.newId) {
+          return 1;
+        }
+        if(h1.newId<h2.newId){
+          return -1;
+        }
+        return 0;
+      });
   }
 
   _init() {
