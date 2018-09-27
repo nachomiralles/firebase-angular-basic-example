@@ -15,7 +15,7 @@ export class DatabaseService {
   public heroes: Subject<Hero[]> = new Subject<Hero[]>();
 
   constructor() {
-    this._init();
+    this.db = firebase.firestore();
     this.conectWithHeroes();
   }
 
@@ -64,10 +64,10 @@ export class DatabaseService {
       });
   }
 
-  _init() {
-    firebase.initializeApp(environment.firebase);
-    this.db = firebase.firestore();
-    const settings = {/* your settings... */ timestampsInSnapshots: true};
-    this.db.settings(settings);
-  }
+  // _init() {
+  //   firebase.initializeApp(environment.firebase);
+  //
+  //   const settings = {/* your settings... */ timestampsInSnapshots: true};
+  //   this.db.settings(settings);
+  // }
 }

@@ -15,6 +15,7 @@ import { HeroesComponent }      from './heroes/heroes.component';
 import { HeroSearchComponent }  from './hero-search/hero-search.component';
 import { MessagesComponent }    from './messages/messages.component';
 import { DatabaseService } from './providers/database.service';
+import {FirebaseInitializerService} from './providers/firebase-initializer.service';
 
 @NgModule({
   imports: [
@@ -22,7 +23,6 @@ import { DatabaseService } from './providers/database.service';
     FormsModule,
     AppRoutingModule,
     HttpClientModule,
-
     // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
     // and returns simulated server responses.
     // Remove it when a real server is ready to receive requests.
@@ -30,7 +30,9 @@ import { DatabaseService } from './providers/database.service';
       InMemoryDataService, { dataEncapsulation: false }
     )
   ],
-  providers: [DatabaseService],
+  providers: [
+    DatabaseService,
+    FirebaseInitializerService],
   declarations: [
     AppComponent,
     DashboardComponent,
